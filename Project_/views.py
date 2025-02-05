@@ -6,7 +6,7 @@ from Project_.models import DTP
 
 def home(request):
     dtp = DTP.objects.all()
-    return render(request, 'home.html', {'dtp': dtp})
+    return render(request, 'index.html', {'dtp': dtp})
 
 def navbar(request):
      return render(request, 'NavBar.html',)
