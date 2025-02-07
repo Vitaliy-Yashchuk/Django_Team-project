@@ -10,3 +10,11 @@ def home(request):
 
 def navbar(request):
      return render(request, 'NavBar.html',)
+
+def create(request):
+    return render(request, 'create.html',)
+
+
+def get_protocol(request):
+    return render(request, 'sucess.html',)
+    
