@@ -5,8 +5,10 @@ import logging
 from Project_.models import DTP
 
 def home(request):
+    print("Функція home викликається!")
     dtp = DTP.objects.all()
     return render(request, 'index.html', {'dtp': dtp})
+
 
 def navbar(request):
      return render(request, 'NavBar.html',)

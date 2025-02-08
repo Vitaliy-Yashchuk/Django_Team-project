@@ -5,6 +5,7 @@ from django.urls import path, include # type: ignore
 from Project_ import views 
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('navbar/', views.navbar, name='navbar'),
     path('create/', views.create, name='create'),
     path('get/', views.get_protocol, name='get'),
