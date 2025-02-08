@@ -17,3 +17,77 @@
 .custom-navbar .nav-link:hover {
     color: #000000;
 }
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+form {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input, select {
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #28a745;
+}
+
+.btn-lg {
+    font-size: 18px;
+}
+
+.form-group .invalid-feedback {
+    display: none;
+}
+
+form .needs-validation .invalid-feedback {
+    display: block;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e9ecef;
+}
+/* Підсвітка полів з помилками після валідації */
+.was-validated input:invalid, .was-validated textarea:invalid {
+    border-color: red;
+}
+
+/* Підсвітка полів при фокусі на невірному полі */
+.was-validated input:focus:invalid, .was-validated textarea:focus:invalid {
+    border-color: darkred;
+}
+
+/* Відображення повідомлення про помилку */
+.invalid-feedback {
+    display: block;  /* Покажемо повідомлення після спроби відправки */
+    color: red;
+    font-size: 0.9em;
+}
+
+/* Зелений колір для правильних полів після валідації */
+.was-validated input:valid, .was-validated textarea:valid {
+    border-color: green;
+}
+
+
+
