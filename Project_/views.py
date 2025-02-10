@@ -36,9 +36,14 @@ def create(request):
     return render(request, 'create.html', {'form': form})
 
 
-def success(request, protocol_id):
-    protocol = get_object_or_404(DTP, id=protocol_id)
-    return render(request, 'success.html', {'protocol': protocol})
+def success(request):
+    dtp = DTP.objects.all()
+    return render(request, 'success.html', {'dtp': dtp})
+
+
+def get_id(request, pk):
+    dtp = get_object_or_404(DTP, pk=pk)
+    return render(request, 'getID.html', {'dtp': dtp})
 
 # Оновлена функція для створення PDF з xhtml2pdf
 def generate_pdf(protocol):

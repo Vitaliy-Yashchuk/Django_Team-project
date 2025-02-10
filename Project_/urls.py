@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('navbar/', views.navbar, name='navbar'),
     path('create/', views.create, name='create'),
-    path('get/', views.get_protocol, name='get'),
+    path('get/', views.success, name='get'),
     path('generate_pdf/', views.generate_pdf, name='generate_pdf'),
+    path('get_id/<int:pk>/', views.get_id, name='getId')
 ]
