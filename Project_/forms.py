@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from django import forms
 from .models import DTP
 
@@ -20,7 +21,7 @@ class DTPForm(forms.ModelForm):
         return license_plate2
 
     def clean_date(self):
-        date = self.cleaned_data.get('date')
-        if date > datetime.date.today():
-            raise forms.ValidationError("Дата не може бути в майбутньому")
-        return date
+        data = self.cleaned_data['date']
+        if data < date.today():  # Додайте дужки після `today`
+            raise forms.ValidationError("Дата ДТП не може бути у минулому.")
+        return data

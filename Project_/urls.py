@@ -9,4 +9,5 @@ urlpatterns = [
     path('navbar/', views.navbar, name='navbar'),
     path('create/', views.create, name='create'),
     path('get/', views.get_protocol, name='get'),
+    path('generate_pdf/', views.generate_pdf, name='generate_pdf'),
 ]
