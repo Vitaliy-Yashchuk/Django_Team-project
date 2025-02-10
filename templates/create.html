@@ -69,8 +69,12 @@
         </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-success btn-lg">Створити протокол</button>
+
+            <a href="{% url 'get' %}" class="btn btn-success btn-lg mt-3 shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105" >
+                <button type="submit" class="btn btn-success btn-lg">Створити протокол</button>
+            </a>
         </div>
+        
     </form>
 </div>
 {% include 'Footer.html' %}    

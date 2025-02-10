@@ -11,6 +11,6 @@ class DTP(models.Model):
     insurance = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name_dri1
+        return f'{self.date} - {self.location}'
 
 # Create your models here.
