@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+STATIC_URL = '/static/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'DTP_project_first.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],  # Глобальна директорія templates (необов'язково)
+        'DIRS': [BASE_DIR / 'templates'],  # Глобальна директорія templates (необов'язково)
         'APP_DIRS': True,  # Дозволяє Django шукати шаблони у директоріях templates додатків
         'OPTIONS': {
             'context_processors': [

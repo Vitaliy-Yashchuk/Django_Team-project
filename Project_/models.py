@@ -6,8 +6,8 @@ class DTP(models.Model):
     location = models.CharField(max_length=255)
     name_dri1 = models.CharField(max_length=255)
     name_dri2 = models.CharField(max_length=255)
-    license_plate1 = models.IntegerField()
-    license_plate2 = models.IntegerField()
+    license_plate1 = models.CharField(max_length=20, null=True)
+    license_plate2 = models.CharField(max_length=20, null=True)
     insurance = models.CharField(max_length=255)
 
     def __str__(self):
