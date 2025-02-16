@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{% static 'styles.css' %}">
 <div class="container mt-5">
     <h1 class="display-4 text-primary text-center mb-4">Створення нового Євро-протоколу</h1>
-    
     <form method="POST" action="{% url 'create' %}" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="row">
@@ -67,16 +66,108 @@
             <input type="text" id="insurance" name="insurance" class="form-control" placeholder="Назва страхувальної компанії" required>
             <div class="invalid-feedback">Будь ласка, введіть інформацію про страхування.</div>
         </div>
-
-        <div class="text-center">
-
-            <a href="{% url 'get' %}" class="btn btn-success btn-lg mt-3 shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105" >
-                <button type="submit" class="btn btn-success btn-lg">Створити протокол</button>
-            </a>
-        </div>
+        <style>
+            .canvas-container {
+                position: relative;
+                display: inline-block;
+                border: 3px solid black;
+                background-color: #f8f8f8;
+            }
+    
+            canvas {
+                cursor: crosshair;
+                display: block;
+                border: 2px dashed gray;
+            }
+    
+            .grid {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+            }
+        </style>
+        <form method="POST" action="{% url 'create' %}" class="needs-validation" novalidate enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group mb-4">
+                <label class="form-label">Намалюйте схему ДТП:</label>
+                <div class="canvas-container">
+                    <canvas id="drawingCanvas" width="500" height="300"></canvas>
+                    <canvas id="gridCanvas" width="500" height="300" class="grid"></canvas>
+                </div>
+                <br>
+                <button type="button" id="clearCanvas" class="btn btn-warning">Очистити</button>
+                <button type="button" id="saveCanvas" class="btn btn-primary">Зберегти малюнок</button>
+            </div>
         
-    </form>
-</div>
+            <input type="hidden" name="image_data" id="imageData">
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg">Створити протокол</button>
+            </div>
+        </form>
+    </div>
 {% include 'Footer.html' %}    
 <script src="{% static 'js/scripts.js' %}"></script>
+<script>
+    const canvas = document.getElementById("drawingCanvas");
+    const ctx = canvas.getContext("2d");
+    let drawing = false;
+
+    canvas.addEventListener("mousedown", () => drawing = true);
+    canvas.addEventListener("mouseup", () => {
+        drawing = false;
+        ctx.beginPath();
+    });
+    canvas.addEventListener("mousemove", draw);
+
+    function draw(event) {
+        if (!drawing) return;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "black";
+
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(event.offsetX, event.offsetY);
+    }
+
+    document.getElementById("clearCanvas").addEventListener("click", function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+    });
+
+    document.getElementById("saveCanvas").addEventListener("click", function() {
+        const imageData = canvas.toDataURL("image/png");
+        document.getElementById("imageData").value = imageData;
+    });
+
+    // Малювання сітки
+    const gridCanvas = document.getElementById("gridCanvas");
+    const gridCtx = gridCanvas.getContext("2d");
+
+    function drawGrid(step = 50) {
+        gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+        gridCtx.strokeStyle = "#ddd";
+        gridCtx.lineWidth = 1;
+
+        for (let x = 0; x < gridCanvas.width; x += step) {
+            gridCtx.beginPath();
+            gridCtx.moveTo(x, 0);
+            gridCtx.lineTo(x, gridCanvas.height);
+            gridCtx.stroke();
+        }
+
+        for (let y = 0; y < gridCanvas.height; y += step) {
+            gridCtx.beginPath();
+            gridCtx.moveTo(0, y);
+            gridCtx.lineTo(gridCanvas.width, y);
+            gridCtx.stroke();
+        }
+    }
+
+    drawGrid();
+</script>
 {% endblock %}
