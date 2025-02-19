@@ -5,7 +5,9 @@ from .models import DTP
 class DTPForm(forms.ModelForm):
     class Meta:
         model = DTP
-        fields = ['date', 'location', 'name_dri1', 'name_dri2', 'license_plate1', 'license_plate2', 'insurance']
+        fields = ['date', 'location', 'name_dri1', 'name_dri2', 'license_plate1', 'license_plate2', 'insurance', 'image']
+
+    image = forms.ImageField(required=False, label="Додати малюнок (необов’язково)")
 
     # Валідація для кожного поля
     def clean_license_plate1(self):

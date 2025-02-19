@@ -9,6 +9,8 @@ from Project_.models import DTP
 from .forms import DTPForm 
 from .models import DTP
 from reportlab.pdfgen import canvas
+from django.core.files.base import ContentFile
+import base64
 
 
 def home(request):
@@ -26,14 +28,26 @@ def get_protocol(request):
     
 def create(request):
     if request.method == "POST":
-        form = DTPForm(request.POST)
+        form = DTPForm(request.POST, request.FILES)  # Форма з FILES
         if form.is_valid():
-            form.save()
-            return redirect('home')  # Перенаправлення на головну сторінку після збереження
+            dtp_instance = form.save(commit=False)  # Не зберігаємо поки що
+            dtp_instance.save()  # Зберігаємо об'єкт без малюнка
+
+            # Тепер зберігаємо зображення (якщо воно є)
+            if 'image' in request.FILES:
+                dtp_instance.image = request.FILES['image']
+                dtp_instance.save()
+            else:
+                print(dtp_instance.image.url)
+            print(f"Saved DTP record with image: {dtp_instance.image.url}")  # Лог
+            return redirect('home')
+        else:
+            print("Form is not valid")  # Лог
     else:
         form = DTPForm()
 
     return render(request, 'create.html', {'form': form})
+
 
 
 def success(request):

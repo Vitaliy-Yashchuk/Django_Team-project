@@ -18,22 +18,26 @@
     <h2 class="text-secondary text-center mb-4">Останні випадки ДТП</h2>
 
     {% if dtp %}
-        <div class="row row-cols-1 row-cols-md-2 g-4">
-            {% for case in dtp %}
-                <div class="col">
-                    <div class="card border-primary h-100 shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 duration-300">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary">Дата: {{ case.date }}</h5>
-                            <p class="card-text"><strong>Місце:</strong> {{ case.location }}</p>
-                            <p class="card-text"><strong>Водій 1:</strong> {{ case.name_dri1 }} Номер авто: {{ case.license_plate1 }}</p>
-                            <p class="card-text"><strong>Водій 2:</strong> {{ case.name_dri2 }} Номер авто: {{ case.license_plate2 }}</p>
-                            <a href="{% url 'getId' pk=case.pk %}" class="btn btn-outline-primary btn-sm mt-2"><i class="fas fa-eye"></i> Деталі</a>
-                        </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for case in dtp %}
+            <div class="col">
+                <div class="card border-primary h-100 shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 duration-300">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Дата: {{ case.date }}</h5>
+                        <p class="card-text"><strong>Місце:</strong> {{ case.location }}</p>
+                        <p class="card-text"><strong>Водій 1:</strong> {{ case.name_dri1 }} Номер авто: {{ case.license_plate1 }}</p>
+                        <p class="card-text"><strong>Водій 2:</strong> {{ case.name_dri2 }} Номер авто: {{ case.license_plate2 }}</p>
+                        {% if case.image %}
+                            <img src="{{ dtp_instance.image.url }}" alt="Image" />
+                        {% endif %}
+                        <br>
+                        <a href="{% url 'getId' pk=case.pk %}" class="btn btn-outline-primary btn-sm mt-2"><i class="fas fa-eye"></i> Деталі</a>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    {% else %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
         <p class="text-muted text-center">Немає зареєстрованих випадків ДТП.</p>
     {% endif %}
 
