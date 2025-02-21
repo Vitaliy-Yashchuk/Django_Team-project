@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'styles.css' %}">
 <div class="container mt-5">
     <h1 class="display-4 text-primary text-center mb-4">Створення нового Євро-протоколу</h1>
-    <form method="POST" action="{% url 'create' %}" class="needs-validation" novalidate>
+    <form method="POST" action="{% url 'create' %}" class="needs-validation" novalidate enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-6">
@@ -89,8 +89,6 @@
                 pointer-events: none;
             }
         </style>
-        <form method="POST" action="{% url 'create' %}" class="needs-validation" novalidate enctype="multipart/form-data">
-            {% csrf_token %}
             <div class="form-group mb-4">
                 <label class="form-label">Намалюйте схему ДТП:</label>
                 <div class="canvas-container">
@@ -106,7 +104,7 @@
             <div class="text-center">
                 <button type="submit" class="btn btn-success btn-lg">Створити протокол</button>
             </div>
-        </form>
+    </form>    
     </div>
 {% include 'Footer.html' %}    
 <script src="{% static 'js/scripts.js' %}"></script>
