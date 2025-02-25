@@ -6,6 +6,23 @@
 <link rel="stylesheet" href="{% static 'styles.css' %}">
 <div class="container mt-5">
     <h1 class="display-4 text-primary text-center mb-4">Створення нового Євро-протоколу</h1>
+    {% if messages %}
+        <div id="message-container" class="alert alert-success text-center">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        <script>
+            setTimeout(function() {
+                let messageBox = document.getElementById("message-container");
+                if (messageBox) {
+                    messageBox.style.transition = "opacity 0.5s";
+                    messageBox.style.opacity = "0";
+                    setTimeout(() => messageBox.remove(), 500);
+                }
+            }, 3000);
+        </script>
+    {% endif %}
     <form method="POST" action="{% url 'create' %}" class="needs-validation" novalidate enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
