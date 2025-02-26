@@ -10,7 +10,11 @@ from .forms import DTPForm
 from .models import DTP
 from reportlab.pdfgen import canvas
 from django.core.files.base import ContentFile
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from django.conf import settings
 import base64
+
 
 
 def home(request):
@@ -33,13 +37,15 @@ def create(request):
             dtp_instance = form.save(commit=False)  # Не зберігаємо поки що
             dtp_instance.save()  # Зберігаємо об'єкт без малюнка
 
-            # Тепер зберігаємо зображення (якщо воно є)
-            if 'image' in request.FILES:
-                dtp_instance.image = request.FILES['image']
-                dtp_instance.save()
-            else:
-                print(dtp_instance.image.url)
-            print(f"Saved DTP record with image: {dtp_instance.image.url}")  # Лог
+            # Збереження малюнка
+            image_data = request.POST.get('image_data')  # Отримуємо дані малюнка (Base64)
+            if image_data:
+                # Перетворюємо Base64 в зображення
+                format, imgstr = image_data.split(';base64,')  # Витягуємо формат і Base64
+                ext = format.split('/')[1]  # Отримуємо розширення з формату (наприклад, png)
+                img_data = ContentFile(base64.b64decode(imgstr), name="drawing." + ext)
+                dtp_instance.image.save("drawing." + ext, img_data, save=True)  # Зберігаємо малюнок
+
             return redirect('home')
         else:
             print("Form is not valid")  # Лог
@@ -47,8 +53,6 @@ def create(request):
         form = DTPForm()
 
     return render(request, 'create.html', {'form': form})
-
-
 
 def success(request):
     dtp = DTP.objects.all()
@@ -101,21 +105,39 @@ def download_protocol_pdf(request, protocol_id):
     return render(request, 'success.html', {'protocol': protocol, 'file_url': file_url})
 
 
+
 def generate_pdf(request):
+    # Отримуємо параметри з GET-запиту
+    date = request.GET.get('date', 'Не вказано')
+    location = request.GET.get('location', 'Не вказано')
+    name_dri1 = request.GET.get('name_dri1', 'Не вказано')
+    license_plate1 = request.GET.get('license_plate1', 'Не вказано')
+    name_dri2 = request.GET.get('name_dri2', 'Не вказано')
+    license_plate2 = request.GET.get('license_plate2', 'Не вказано')
+
+    # Вказуємо правильний шлях до шрифту
+    font_path = os.path.join(settings.BASE_DIR, 'Project_', 'static', 'fonts', 'DejaVuSans.ttf')
+
+    # Перевіряємо, чи існує файл
+    if not os.path.exists(font_path):
+        raise FileNotFoundError(f"Файл шрифту не знайдено: {font_path}")
+
     # Створення PDF у пам'яті
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
 
+    # Додаємо підтримку кирилиці
+    pdfmetrics.registerFont(TTFont('DejaVuSans', font_path))
+    p.setFont("DejaVuSans", 12)
+
     # Додаємо текст у PDF
-    p.setFont("Helvetica", 12)
     p.drawString(100, 800, "Євро-протокол ДТП")
-    p.drawString(100, 780, f"Дата ДТП: {request.GET.get('date', 'Не вказано')}")
-    p.drawString(100, 760, f"Місце ДТП: {request.GET.get('location', 'Не вказано')}")
-    p.drawString(100, 740, f"Водій 1: {request.GET.get('name_dri1', 'Не вказано')}")
-    p.drawString(100, 720, f"Номер авто (Водій 1): {request.GET.get('license_plate1', 'Не вказано')}")
-    p.drawString(100, 700, f"Водій 2: {request.GET.get('name_dri2', 'Не вказано')}")
-    p.drawString(100, 680, f"Номер авто (Водій 2): {request.GET.get('license_plate2', 'Не вказано')}")
-    p.drawString(100, 660, f"Страхування: {request.GET.get('insurance', 'Не вказано')}")
+    p.drawString(100, 780, f"Дата ДТП: {date}")
+    p.drawString(100, 760, f"Місце ДТП: {location}")
+    p.drawString(100, 740, f"Водій 1: {name_dri1}")
+    p.drawString(100, 720, f"Номер авто (Водій 1): {license_plate1}")
+    p.drawString(100, 700, f"Водій 2: {name_dri2}")
+    p.drawString(100, 680, f"Номер авто (Водій 2): {license_plate2}")
 
     # Завершуємо PDF
     p.showPage()

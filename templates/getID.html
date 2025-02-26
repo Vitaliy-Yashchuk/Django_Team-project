@@ -22,11 +22,10 @@
             </div>
         </div>
         <p class="text-muted text-center">Немає зареєстрованих випадків ДТП.</p>
-        <div class="text-center mt-4">
-            <a href="{% url 'generate_pdf' %}" class="btn btn-primary btn-lg">
-                Завантажити PDF
-            </a>
-        </div>
+        <a href="{% url 'generate_pdf' %}?date={{ dtp.date }}&location={{ dtp.location }}&name_dri1={{ dtp.name_dri1 }}&license_plate1={{ dtp.license_plate1 }}&name_dri2={{ dtp.name_dri2 }}&license_plate2={{ dtp.license_plate2 }}" class="btn btn-primary btn-lg">
+            Завантажити PDF
+        </a>
+        
 
     </div>
 
