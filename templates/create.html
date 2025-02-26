@@ -54,8 +54,8 @@
             <div class="col-md-6">
                 <div class="form-group mb-4">
                     <label for="license_plate1" class="form-label">Номер авто (Водій 1)</label>
-                    <input type="text" id="license_plate1" name="license_plate1" class="form-control" placeholder="Номер авто" required>
-                    <div class="invalid-feedback">Будь ласка, введіть номер авто водія 1.</div>
+                    <input type="text" id="license_plate1" name="license_plate1" class="form-control" placeholder="Номер авто" pattern="^[A-Za-z0-9]{1,10}$" required>
+                    <div class="invalid-feedback">Будь ласка, введіть коректний номер авто (до 10 символів).</div>
                 </div>
             </div>
         </div>
@@ -72,8 +72,8 @@
             <div class="col-md-6">
                 <div class="form-group mb-4">
                     <label for="license_plate2" class="form-label">Номер авто (Водій 2)</label>
-                    <input type="text" id="license_plate2" name="license_plate2" class="form-control" placeholder="Номер авто" required>
-                    <div class="invalid-feedback">Будь ласка, введіть номер авто водія 2.</div>
+                    <input type="text" id="license_plate2" name="license_plate2" class="form-control" placeholder="Номер авто" pattern="^[A-Za-z0-9]{1,10}$" required>
+                    <div class="invalid-feedback">Будь ласка, введіть коректний номер авто (до 10 символів).</div>
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
             </div>
     </form>    
     </div>
-{% include 'Footer.html' %}    
+{% include 'Footer.html' %}
 <script src="{% static 'js/scripts.js' %}"></script>
 <script>
     const canvas = document.getElementById("drawingCanvas");
