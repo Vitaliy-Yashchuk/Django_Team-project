@@ -11,7 +11,7 @@ from .models import DTP
 from reportlab.pdfgen import canvas
 from django.core.files.base import ContentFile
 import base64
-
+from django.contrib import messages
 
 def home(request):
     print("Функція home викликається!")
@@ -28,21 +28,21 @@ def get_protocol(request):
     
 def create(request):
     if request.method == "POST":
-        form = DTPForm(request.POST, request.FILES)  # Форма з FILES
+        form = DTPForm(request.POST, request.FILES)
         if form.is_valid():
-            dtp_instance = form.save(commit=False)  # Не зберігаємо поки що
-            dtp_instance.save()  # Зберігаємо об'єкт без малюнка
+            dtp_instance = form.save(commit=False)
+            dtp_instance.save()
 
-            # Тепер зберігаємо зображення (якщо воно є)
             if 'image' in request.FILES:
                 dtp_instance.image = request.FILES['image']
                 dtp_instance.save()
-            else:
-                print(dtp_instance.image.url)
-            print(f"Saved DTP record with image: {dtp_instance.image.url}")  # Лог
-            return redirect('home')
+
+            messages.success(request, "✅ Євро-протокол успішно створений!")  
+            return render(request, 'create.html', {'form': DTPForm()})  
+
         else:
-            print("Form is not valid")  # Лог
+            messages.error(request, "❌ Помилка! Будь ласка, перевірте введені дані.")
+
     else:
         form = DTPForm()
 
